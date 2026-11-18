@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- 1. Airtel Recharge 100 -->
+    <record id="product_air_100" model="product.product">
+        <field name="name">Airtel Recharge ₹100</field>
+        <field name="default_code">AIR-100</field>
+        <field name="type">service</field>
+        <field name="available_in_pos" eval="True"/>
+        <field name="lst_price">100.0</field>
+    </record>
+    <record id="voucher_product_air_100" model="recharge.voucher.product">
+        <field name="name">Airtel Recharge</field>
+        <field name="service_code">AIR-100</field>
+        <field name="product_id" ref="product_air_100"/>
+        <field name="face_value">100.0</field>
+        <field name="selling_price">100.0</field>
+        <field name="notes">Prepaid mobile recharge for Bharti Airtel subscribers.</field>
+    </record>
+
+    <!-- 2. Jio Recharge 239 -->
+    <record id="product_jio_239" model="product.product">
+        <field name="name">Jio Recharge ₹239</field>
+        <field name="default_code">JIO-239</field>
+        <field name="type">service</field>
+        <field name="available_in_pos" eval="True"/>
+        <field name="lst_price">239.0</field>
+    </record>
+    <record id="voucher_product_jio_239" model="recharge.voucher.product">
+        <field name="name">Jio Recharge</field>
+        <field name="service_code">JIO-239</field>
+        <field name="product_id" ref="product_jio_239"/>
+        <field name="face_value">239.0</field>
+        <field name="selling_price">239.0</field>
+        <field name="notes">Prepaid 4G/5G mobile recharge for Reliance Jio subscribers.</field>
+    </record>
+
+    <!-- 3. Vi Recharge 199 -->
+    <record id="product_vi_199" model="product.product">
+        <field name="name">Vi Recharge ₹199</field>
+        <field name="default_code">VI-199</field>
+        <field name="type">service</field>
+        <field name="available_in_pos" eval="True"/>
+        <field name="lst_price">199.0</field>
+    </record>
+    <record id="voucher_product_vi_199" model="recharge.voucher.product">
+        <field name="name">Vi Recharge</field>
+        <field name="service_code">VI-199</field>
+        <field name="product_id" ref="product_vi_199"/>
+        <field name="face_value">199.0</field>
+        <field name="selling_price">199.0</field>
+        <field name="notes">Prepaid mobile recharge for Vodafone Idea (Vi) subscribers.</field>
+    </record>
+
+    <!-- 4. Google Play Gift Card 500 -->
+    <record id="product_gplay_500" model="product.product">
+        <field name="name">Google Play Gift Card ₹500</field>
+        <field name="default_code">GPLAY-500</field>
+        <field name="type">service</field>
+        <field name="available_in_pos" eval="True"/>
+        <field name="lst_price">500.0</field>
+    </record>
+    <record id="voucher_product_gplay_500" model="recharge.voucher.product">
+        <field name="name">Google Play Gift Card</field>
+        <field name="service_code">GPLAY-500</field>
+        <field name="product_id" ref="product_gplay_500"/>
+        <field name="face_value">500.0</field>
+        <field name="selling_price">500.0</field>
+        <field name="notes">Digital wallet code for Google Play store apps and games.</field>
+    </record>
+
+    <!-- 5. Gaming Gift Card 1000 (Selling: 1050) -->
+    <record id="product_game_1000" model="product.product">
+        <field name="name">Gaming Gift Card ₹1,000</field>
+        <field name="default_code">GAME-1000</field>
+        <field name="type">service</field>
+        <field name="available_in_pos" eval="True"/>
+        <field name="lst_price">1050.0</field>
+    </record>
+    <record id="voucher_product_game_1000" model="recharge.voucher.product">
+        <field name="name">Gaming Gift Card</field>
+        <field name="service_code">GAME-1000</field>
+        <field name="product_id" ref="product_game_1000"/>
+        <field name="face_value">1000.0</field>
+        <field name="selling_price">1050.0</field>
+        <field name="notes">Gaming wallet voucher with convenience fee (Face Value ₹1,000, Selling ₹1,050).</field>
+    </record>
+
+    <!-- Default Initial Supplier -->
+    <record id="supplier_national_distributor" model="recharge.voucher.supplier">
+        <field name="name">National Telecom &amp; Digital Distributors Ltd</field>
+        <field name="code">NTDD-IND</field>
+        <field name="contact_name">Suresh Kumar</field>
+        <field name="email">orders@nationaltelecomdist.example.in</field>
+        <field name="phone">+91 80 4123 4567</field>
+        <field name="address">Prestige Meridian, MG Road, Bengaluru, Karnataka 560001</field>
+    </record>
+</odoo>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Controlled Reprint Wizard View -->
+    <record id="view_recharge_voucher_reprint_wizard_form" model="ir.ui.view">
+        <field name="name">recharge.voucher.reprint.wizard.form</field>
+        <field name="model">recharge.voucher.reprint.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Controlled Voucher Reprint">
+                <field name="state" invisible="1"/>
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="state == 'done'">
+                        <strong>Warning:</strong> Reprinting reveals the customer PIN. Every reprint is permanently recorded in the audit log.
+                    </div>
+                    <group invisible="state == 'done'">
+                        <field name="issue_id" invisible="1"/>
+                        <field name="serial_number"/>
+                        <field name="reason"/>
+                        <field name="notes" placeholder="Explain why the reprint is necessary..."/>
+                    </group>
+                    <div invisible="state != 'done'">
+                        <field name="reprinted_receipt_html" widget="html"/>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_reprint" string="Confirm &amp; Reveal Duplicate Ticket" type="object" class="btn-danger" invisible="state == 'done'"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_voucher_issue_reprint_wizard" model="ir.actions.act_window">
+        <field name="name">Reprint Voucher</field>
+        <field name="res_model">recharge.voucher.reprint.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Refund Wizard View -->
+    <record id="view_recharge_voucher_refund_wizard_form" model="ir.ui.view">
+        <field name="name">recharge.voucher.refund.wizard.form</field>
+        <field name="model">recharge.voucher.refund.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Process Voucher Refund">
+                <sheet>
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Security Policy:</strong> Because this voucher's PIN has already been revealed, processing this refund will mark the voucher as <strong>BLOCKED</strong>. It will NEVER return to available inventory.
+                    </div>
+                    <group>
+                        <field name="issue_id" invisible="1"/>
+                        <field name="serial_number"/>
+                        <field name="refund_reason"/>
+                        <field name="explanation" placeholder="Provide detailed audit reasoning..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_refund" string="Confirm Refund &amp; Invalidate Voucher" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_voucher_issue_refund_wizard" model="ir.actions.act_window">
+        <field name="name">Process Refund</field>
+        <field name="res_model">recharge.voucher.refund.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recharge_voucher_reconciliation_tree" model="ir.ui.view">
+        <field name="name">recharge.voucher.reconciliation.report.tree</field>
+        <field name="model">recharge.voucher.reconciliation.report</field>
+        <field name="arch" type="xml">
+            <tree string="Inventory Reconciliation (Imported = Available + Reserved + Sold + Blocked + Expired)" create="false" edit="false">
+                <field name="service_code"/>
+                <field name="batch_id"/>
+                <field name="supplier_id"/>
+                <field name="total_imported" sum="Total Imported" decoration-bf="1"/>
+                <field name="available_qty" sum="Total Available" decoration-success="available_qty &gt; 0"/>
+                <field name="reserved_qty" sum="Total Reserved" decoration-warning="reserved_qty &gt; 0"/>
+                <field name="sold_qty" sum="Total Sold" decoration-info="sold_qty &gt; 0"/>
+                <field name="blocked_qty" sum="Total Blocked" decoration-danger="blocked_qty &gt; 0"/>
+                <field name="expired_qty" sum="Total Expired" decoration-muted="expired_qty &gt; 0"/>
+                <field name="total_face_value" widget="monetary" sum="Total Face Value"/>
+                <field name="sold_face_value" widget="monetary" sum="Sold Face Value"/>
+                <field name="total_purchase_cost" widget="monetary" sum="Total Purchase Cost" groups="recharge_voucher_management.group_voucher_finance,recharge_voucher_management.group_voucher_operations"/>
+                <field name="currency_id" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recharge_voucher_reconciliation_pivot" model="ir.ui.view">
+        <field name="name">recharge.voucher.reconciliation.report.pivot</field>
+        <field name="model">recharge.voucher.reconciliation.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Inventory Reconciliation Matrix" sample="1">
+                <field name="service_code" type="row"/>
+                <field name="batch_id" type="row"/>
+                <field name="total_imported" type="measure"/>
+                <field name="available_qty" type="measure"/>
+                <field name="sold_qty" type="measure"/>
+                <field name="blocked_qty" type="measure"/>
+                <field name="expired_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_recharge_voucher_reconciliation_search" model="ir.ui.view">
+        <field name="name">recharge.voucher.reconciliation.report.search</field>
+        <field name="model">recharge.voucher.reconciliation.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Reconciliation">
+                <field name="service_code"/>
+                <field name="batch_id"/>
+                <field name="supplier_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Service Code" name="group_service" context="{'group_by': 'service_code'}"/>
+                    <filter string="Batch Reference" name="group_batch" context="{'group_by': 'batch_id'}"/>
+                    <filter string="Supplier" name="group_supplier" context="{'group_by': 'supplier_id'}"/>
+                    <filter string="Store" name="group_store" context="{'group_by': 'store_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_recharge_voucher_reconciliation" model="ir.actions.act_window">
+        <field name="name">Inventory Reconciliation</field>
+        <field name="res_model">recharge.voucher.reconciliation.report</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="context">{'search_default_group_service': 1}</field>
+    </record>
+</odoo>
+

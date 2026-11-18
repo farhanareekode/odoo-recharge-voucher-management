@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="recharge_voucher_management.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-receipt')]//div[hasclass('before-footer')]" position="inside">
+            <t t-if="props.data.voucher_issued_details and props.data.voucher_issued_details.length > 0">
+                <div class="voucher-receipt-section" style="margin-top: 15px; border-top: 2px dashed #000; padding-top: 10px;">
+                    <div class="pos-receipt-center-align" style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px; text-align: center;">
+                        *** PREPAID RECHARGE VOUCHER ***
+                    </div>
+                    <t t-foreach="props.data.voucher_issued_details" t-as="voucher" t-key="voucher.serial_number">
+                        <div class="voucher-box" style="border: 1px solid #000; margin: 8px 0; padding: 8px; font-family: monospace;">
+                            <div style="font-weight: bold; font-size: 1.1em; text-align: center;">
+                                <t t-esc="voucher.product_name"/>
+                            </div>
+                            <div style="text-align: center; font-size: 0.9em; margin-bottom: 5px;">
+                                Service Code: <t t-esc="voucher.service_code"/>
+                            </div>
+                            <div>Denomination: ₹<t t-esc="voucher.face_value"/></div>
+                            <div>Serial No: <t t-esc="voucher.serial_number"/></div>
+                            <div style="font-size: 1.3em; font-weight: bold; background: #eee; padding: 6px; text-align: center; margin: 6px 0; border: 1px dashed #666; letter-spacing: 2px;">
+                                PIN: <t t-esc="voucher.pin"/>
+                            </div>
+                            <div style="font-size: 0.85em; text-align: right;">
+                                Valid Until: <t t-esc="voucher.expiry_date"/>
+                            </div>
+                        </div>
+                    </t>
+                    <div style="font-size: 0.8em; text-align: center; margin-top: 6px; color: #555;">
+                        Please safeguard your voucher PIN.<br/>
+                        Vouchers are non-refundable once printed.
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </t>
+</templates>
+

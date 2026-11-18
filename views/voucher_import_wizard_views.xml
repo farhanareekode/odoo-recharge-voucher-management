@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action declared first so %(action_recharge_voucher_import_wizard)d is available in view -->
+    <record id="action_recharge_voucher_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Vouchers (CSV)</field>
+        <field name="res_model">recharge.voucher.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_recharge_voucher_import_wizard_form" model="ir.ui.view">
+        <field name="name">recharge.voucher.import.wizard.form</field>
+        <field name="model">recharge.voucher.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Recharge Vouchers from CSV">
+                <field name="state" invisible="1"/>
+                <!-- Step 1: Upload -->
+                <div invisible="state != 'upload'">
+                    <div class="alert alert-info" role="alert">
+                        <h4>Prepaid Voucher CSV Ingestion</h4>
+                        <p>Upload the supplier voucher manifest. Required CSV columns:</p>
+                        <code>service_code,serial_number,pin_code,batch_ref,expiry_date,purchase_cost</code>
+                    </div>
+                    <group>
+                        <group string="File &amp; Supplier">
+                            <field name="data_file" filename="filename" widget="binary"/>
+                            <field name="filename" invisible="1"/>
+                            <field name="supplier_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Validation Policy">
+                            <field name="import_mode" widget="radio"/>
+                        </group>
+                    </group>
+                </div>
+
+                <!-- Step 2: Preview & Validation -->
+                <div invisible="state != 'preview'">
+                    <group string="Validation Metrics">
+                        <group>
+                            <field name="total_rows"/>
+                            <field name="valid_rows"/>
+                        </group>
+                        <group>
+                            <field name="error_rows" decoration-danger="error_rows &gt; 0"/>
+                            <field name="import_mode" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sample Preview (Masked PINs)" name="preview">
+                            <field name="preview_html" widget="html"/>
+                        </page>
+                        <page string="Validation Errors &amp; Rejected Rows" name="errors" invisible="error_rows == 0">
+                            <div class="alert alert-danger" role="alert">
+                                The following rows failed verification and cannot be imported without correction:
+                            </div>
+                            <field name="error_line_ids" readonly="1">
+                                <tree decoration-danger="1">
+                                    <field name="row_number"/>
+                                    <field name="service_code"/>
+                                    <field name="serial_number"/>
+                                    <field name="error_message"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </div>
+
+                <!-- Step 3: Done -->
+                <div invisible="state != 'done'">
+                    <field name="summary_html" widget="html"/>
+                </div>
+
+                <footer>
+                    <button name="action_preview_and_validate" string="Validate &amp; Preview" type="object" class="btn-primary" invisible="state != 'upload'"/>
+                    <button name="action_confirm_import" string="Confirm &amp; Encrypt Vouchers" type="object" class="btn-success" invisible="state != 'preview'"/>
+                    <button name="%(action_recharge_voucher_import_wizard)d" string="Upload Different File" type="action" class="btn-secondary" invisible="state != 'preview'"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

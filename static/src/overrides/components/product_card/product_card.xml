@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('price-tag')]" position="after">
+            <t t-if="voucherStock !== undefined">
+                <span t-attf-class="badge {{ voucherStock > 0 ? 'bg-success text-white' : 'bg-danger text-white' }} mt-1 py-1 px-2 fw-bold" style="font-size: 0.75rem; width: fit-content; border-radius: 4px;">
+                    <t t-if="voucherStock > 0">Stock: <t t-esc="voucherStock"/></t>
+                    <t t-else="">Out of Stock</t>
+                </span>
+            </t>
+        </xpath>
+    </t>
+</templates>
+

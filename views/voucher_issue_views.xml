@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recharge_voucher_issue_tree" model="ir.ui.view">
+        <field name="name">recharge.voucher.issue.tree</field>
+        <field name="model">recharge.voucher.issue</field>
+        <field name="arch" type="xml">
+            <tree string="Voucher Issuance Records" create="false" edit="false">
+                <field name="name"/>
+                <field name="issue_date"/>
+                <field name="service_code"/>
+                <field name="serial_number"/>
+                <field name="face_value" widget="monetary"/>
+                <field name="pos_order_id"/>
+                <field name="pos_config_id"/>
+                <field name="user_id"/>
+                <field name="reprint_count"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-success="state == 'issued'" decoration-warning="state == 'reprinted'" decoration-danger="state in ('refunded', 'voided')"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recharge_voucher_issue_form" model="ir.ui.view">
+        <field name="name">recharge.voucher.issue.form</field>
+        <field name="model">recharge.voucher.issue</field>
+        <field name="arch" type="xml">
+            <form string="Voucher Issuance Record" create="false" edit="false">
+                <header>
+                    <button name="%(action_voucher_issue_reprint_wizard)d" string="Controlled Reprint" type="action" class="btn-warning" invisible="state == 'refunded'" groups="recharge_voucher_management.group_voucher_cashier,recharge_voucher_management.group_voucher_store_manager,recharge_voucher_management.group_voucher_operations"/>
+                    <button name="%(action_voucher_issue_refund_wizard)d" string="Process Refund (Block Voucher)" type="action" class="btn-danger" invisible="state == 'refunded'" groups="recharge_voucher_management.group_voucher_store_manager,recharge_voucher_management.group_voucher_operations"/>
+                    <field name="state" widget="statusbar" statusbar_visible="issued,reprinted,refunded"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Issue Reference"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <h3>
+                            <field name="serial_number"/> (<field name="service_code"/>)
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Voucher Details">
+                            <field name="voucher_id" readonly="1"/>
+                            <field name="face_value" widget="monetary" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="POS Sale Reference">
+                            <field name="pos_order_id" readonly="1"/>
+                            <field name="pos_config_id" readonly="1"/>
+                            <field name="pos_session_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="issue_date" readonly="1"/>
+                            <field name="idempotency_key" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reprint Audit History" name="reprints">
+                            <field name="reprint_log_ids" readonly="1">
+                                <tree>
+                                    <field name="reprint_date"/>
+                                    <field name="user_id"/>
+                                    <field name="terminal"/>
+                                    <field name="reason"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Refund Information" name="refund" invisible="state != 'refunded'">
+                            <group>
+                                <field name="refund_reason" readonly="1"/>
+                                <field name="refund_date" readonly="1"/>
+                                <field name="refund_user_id" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_recharge_voucher_issue_pivot" model="ir.ui.view">
+        <field name="name">recharge.voucher.issue.pivot</field>
+        <field name="model">recharge.voucher.issue</field>
+        <field name="arch" type="xml">
+            <pivot string="Voucher Sales Analysis" sample="1">
+                <field name="pos_config_id" type="row"/>
+                <field name="service_code" type="col"/>
+                <field name="face_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="view_recharge_voucher_issue_graph" model="ir.ui.view">
+        <field name="name">recharge.voucher.issue.graph</field>
+        <field name="model">recharge.voucher.issue</field>
+        <field name="arch" type="xml">
+            <graph string="Voucher Sales by Store" type="bar">
+                <field name="pos_config_id"/>
+                <field name="face_value" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_recharge_voucher_issue_search" model="ir.ui.view">
+        <field name="name">recharge.voucher.issue.search</field>
+        <field name="model">recharge.voucher.issue</field>
+        <field name="arch" type="xml">
+            <search string="Search Voucher Issues">
+                <field name="name"/>
+                <field name="serial_number"/>
+                <field name="service_code"/>
+                <field name="pos_order_id"/>
+                <field name="pos_config_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Issued" name="filter_issued" domain="[('state', '=', 'issued')]"/>
+                <filter string="Reprinted" name="filter_reprinted" domain="[('state', '=', 'reprinted')]"/>
+                <filter string="Refunded" name="filter_refunded" domain="[('state', '=', 'refunded')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Store / Terminal" name="group_store" context="{'group_by': 'pos_config_id'}"/>
+                    <filter string="Cashier" name="group_cashier" context="{'group_by': 'user_id'}"/>
+                    <filter string="Service Code" name="group_service" context="{'group_by': 'service_code'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'issue_date:day'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_recharge_voucher_issue" model="ir.actions.act_window">
+        <field name="name">Voucher Issuance Audit</field>
+        <field name="res_model">recharge.voucher.issue</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+</odoo>
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_recharge_voucher_batch_tree" model="ir.ui.view">
+        <field name="name">recharge.voucher.batch.tree</field>
+        <field name="model">recharge.voucher.batch</field>
+        <field name="arch" type="xml">
+            <tree string="Voucher Batches" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="supplier_id"/>
+                <field name="date_received"/>
+                <field name="total_vouchers"/>
+                <field name="available_count" decoration-success="available_count &gt; 0"/>
+                <field name="reserved_count"/>
+                <field name="sold_count"/>
+                <field name="blocked_count" decoration-danger="blocked_count &gt; 0"/>
+                <field name="expired_count" decoration-danger="expired_count &gt; 0"/>
+                <field name="total_face_value" widget="monetary"/>
+                <field name="total_purchase_cost" widget="monetary" groups="recharge_voucher_management.group_voucher_finance,recharge_voucher_management.group_voucher_operations"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state == 'closed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_recharge_voucher_batch_form" model="ir.ui.view">
+        <field name="name">recharge.voucher.batch.form</field>
+        <field name="model">recharge.voucher.batch</field>
+        <field name="arch" type="xml">
+            <form string="Voucher Batch">
+                <header>
+                    <button name="action_close_batch" string="Close Batch" type="object" class="btn-secondary" invisible="state == 'closed'"/>
+                    <button name="action_reopen_batch" string="Reopen Batch" type="object" class="btn-primary" invisible="state != 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_vouchers" type="object" class="oe_stat_button" icon="fa-ticket">
+                            <field name="total_vouchers" widget="statinfo" string="Vouchers"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Batch Reference"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. BATCH-2026-AIR-01"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Batch Information">
+                            <field name="supplier_id"/>
+                            <field name="date_received"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Financials">
+                            <field name="total_face_value" widget="monetary"/>
+                            <field name="total_purchase_cost" widget="monetary" groups="recharge_voucher_management.group_voucher_finance,recharge_voucher_management.group_voucher_operations"/>
+                        </group>
+                    </group>
+                    <group string="Inventory Reconciliation Breakdown">
+                        <group>
+                            <field name="available_count"/>
+                            <field name="reserved_count"/>
+                            <field name="sold_count"/>
+                        </group>
+                        <group>
+                            <field name="blocked_count"/>
+                            <field name="expired_count"/>
+                            <field name="total_vouchers" string="Total Imported"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Vouchers in Batch" name="vouchers">
+                            <field name="voucher_ids" readonly="1">
+                                <tree limit="20">
+                                    <field name="service_code"/>
+                                    <field name="serial_number"/>
+                                    <field name="masked_pin"/>
+                                    <field name="face_value" widget="monetary"/>
+                                    <field name="expiry_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Batch notes, delivery invoice references..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recharge_voucher_batch" model="ir.actions.act_window">
+        <field name="name">Voucher Batches</field>
+        <field name="res_model">recharge.voucher.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
+

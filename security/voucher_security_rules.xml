@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Multi-Company Rules -->
+    <record id="voucher_multi_company_rule" model="ir.rule">
+        <field name="name">Recharge Voucher Multi-Company</field>
+        <field name="model_id" ref="model_recharge_voucher"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="voucher_batch_multi_company_rule" model="ir.rule">
+        <field name="name">Recharge Voucher Batch Multi-Company</field>
+        <field name="model_id" ref="model_recharge_voucher_batch"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="voucher_issue_multi_company_rule" model="ir.rule">
+        <field name="name">Recharge Voucher Issue Multi-Company</field>
+        <field name="model_id" ref="model_recharge_voucher_issue"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Cashier Record Rule: Cannot browse unsold vouchers -->
+    <record id="cashier_voucher_rule" model="ir.rule">
+        <field name="name">Cashier Voucher Rule - Sold Only</field>
+        <field name="model_id" ref="model_recharge_voucher"/>
+        <field name="groups" eval="[(4, ref('group_voucher_cashier'))]"/>
+        <field name="domain_force">[('state', '=', 'sold'), ('pos_order_id.user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Operations / Manager Rule: Can view all vouchers -->
+    <record id="operations_voucher_rule" model="ir.rule">
+        <field name="name">Operations Full Voucher Access</field>
+        <field name="model_id" ref="model_recharge_voucher"/>
+        <field name="groups" eval="[(4, ref('group_voucher_operations'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Auditor Rule: Read-Only Access -->
+    <record id="auditor_voucher_rule" model="ir.rule">
+        <field name="name">Auditor Voucher Read-Only</field>
+        <field name="model_id" ref="model_recharge_voucher"/>
+        <field name="groups" eval="[(4, ref('group_voucher_auditor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Auditor Issue Rule: Read-Only Access -->
+    <record id="auditor_issue_rule" model="ir.rule">
+        <field name="name">Auditor Issue Read-Only</field>
+        <field name="model_id" ref="model_recharge_voucher_issue"/>
+        <field name="groups" eval="[(4, ref('group_voucher_auditor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>
+

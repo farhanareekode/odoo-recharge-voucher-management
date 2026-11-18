@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_recharge_voucher_root"
+              name="Recharge Vouchers"
+              web_icon="point_of_sale,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- 1. Primary Inventory / Vouchers Menu (Default Landing Page) -->
+    <menuitem id="menu_recharge_voucher_inventory"
+              name="Vouchers"
+              parent="menu_recharge_voucher_root"
+              sequence="1"/>
+
+    <menuitem id="menu_recharge_voucher_all"
+              name="All Vouchers"
+              parent="menu_recharge_voucher_inventory"
+              action="action_recharge_voucher_all"
+              sequence="1"/>
+
+    <menuitem id="menu_recharge_voucher_available"
+              name="Available Stock"
+              parent="menu_recharge_voucher_inventory"
+              action="action_recharge_voucher_available"
+              sequence="5"/>
+
+    <menuitem id="menu_recharge_voucher_sold"
+              name="Sold Vouchers"
+              parent="menu_recharge_voucher_inventory"
+              action="action_recharge_voucher_sold"
+              sequence="10"/>
+
+    <menuitem id="menu_recharge_voucher_batches"
+              name="Voucher Batches"
+              parent="menu_recharge_voucher_inventory"
+              action="action_recharge_voucher_batch"
+              sequence="15"/>
+
+    <!-- 2. Operations Menu -->
+    <menuitem id="menu_recharge_voucher_operations"
+              name="Operations"
+              parent="menu_recharge_voucher_root"
+              sequence="10"/>
+
+    <menuitem id="menu_recharge_voucher_import"
+              name="Import Vouchers (CSV)"
+              parent="menu_recharge_voucher_operations"
+              action="action_recharge_voucher_import_wizard"
+              groups="group_voucher_operations"
+              sequence="5"/>
+
+    <!-- 3. Sales & Audit Menu -->
+    <menuitem id="menu_recharge_voucher_sales"
+              name="Sales &amp; Audit"
+              parent="menu_recharge_voucher_root"
+              sequence="20"/>
+
+    <menuitem id="menu_recharge_voucher_issues"
+              name="Voucher Issuance Audit"
+              parent="menu_recharge_voucher_sales"
+              action="action_recharge_voucher_issue"
+              sequence="10"/>
+
+    <!-- 4. Reports Menu -->
+    <menuitem id="menu_recharge_voucher_reports"
+              name="Reporting"
+              parent="menu_recharge_voucher_root"
+              sequence="30"/>
+
+    <menuitem id="menu_recharge_voucher_reconciliation"
+              name="Inventory Reconciliation"
+              parent="menu_recharge_voucher_reports"
+              action="action_recharge_voucher_reconciliation"
+              groups="group_voucher_finance,group_voucher_auditor,group_voucher_store_manager,group_voucher_operations"
+              sequence="10"/>
+
+    <!-- 5. Configuration Menu -->
+    <menuitem id="menu_recharge_voucher_config"
+              name="Configuration"
+              parent="menu_recharge_voucher_root"
+              groups="group_voucher_operations"
+              sequence="40"/>
+
+    <menuitem id="menu_recharge_voucher_products"
+              name="Voucher Products"
+              parent="menu_recharge_voucher_config"
+              action="action_recharge_voucher_product"
+              sequence="10"/>
+
+    <menuitem id="menu_recharge_voucher_suppliers"
+              name="Voucher Suppliers"
+              parent="menu_recharge_voucher_config"
+              action="action_recharge_voucher_supplier"
+              sequence="15"/>
+</odoo>
