@@ -27,7 +27,7 @@ class PosSession(models.Model):
         }
 
     def _get_pos_ui_recharge_voucher_product(self, params):
-        return self.env["recharge.voucher.product"].search_read(
+        return self.env["recharge.voucher.product"].sudo().search_read(
             **params["search_params"]
         )
 

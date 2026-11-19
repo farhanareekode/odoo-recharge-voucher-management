@@ -99,7 +99,7 @@ class RechargeVoucherProduct(models.Model):
         return [("id", "in", res)]
 
     def _compute_voucher_stock(self):
-        Voucher = self.env["recharge.voucher"]
+        Voucher = self.env["recharge.voucher"].sudo()
         for record in self:
             domain = [("service_code", "=", record.service_code)]
             record.voucher_count = Voucher.search_count(domain)
