@@ -114,6 +114,7 @@ class RechargeVoucherRefundWizard(models.TransientModel):
                 "message": _("Voucher %s has been BLOCKED and cannot be re-issued.") % self.serial_number,
                 "type": "warning",
                 "sticky": False,
+                "next": {"type": "ir.actions.act_window_close"},
             },
         }
 
